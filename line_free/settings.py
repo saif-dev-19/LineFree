@@ -23,14 +23,14 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 SECRET_KEY = 'django-insecure-**vwq3e)p)fpw7&jiwupi8dqi)md$)&^n6-n2n)%*m#rgq@ijs'
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = False
+# Enable DEBUG for local development. Use env var in production.
+DEBUG = True
 
 ALLOWED_HOSTS = [
     '.vercel.app',
     'localhost',
     '127.0.0.1',
-    'line-free-git-main-saif-dev-19s-projects.vercel.app',
-    'line-free-nnenfbia9-saif-dev-19s-projects.vercel.app',
+    '[::1]',
 ]
 
 
@@ -65,7 +65,7 @@ ROOT_URLCONF = 'line_free.urls'
 TEMPLATES = [
     {
         'BACKEND': 'django.template.backends.django.DjangoTemplates',
-        'DIRS': [BASE_DIR / 'linefree'/ 'templates'],
+        'DIRS': [BASE_DIR / 'linefree' / 'templates'],
         'APP_DIRS': True,
         'OPTIONS': {
             'context_processors': [
@@ -125,9 +125,9 @@ USE_TZ = True
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/5.2/howto/static-files/
 
-STATIC_URL = 'static/'
+STATIC_URL = '/static/'
 STATIC_ROOT = BASE_DIR / "staticfiles"
-STATIC_FILES_DIR = BASE_DIR / "static"
+STATICFILES_DIRS = [BASE_DIR / "static"]
 STATICFILES_STORAGE = "whitenoise.storage.CompressedStaticFilesStorage"
  # Default primary key field type
 # https://docs.djangoproject.com/en/5.2/ref/settings/#default-auto-field
@@ -138,3 +138,6 @@ DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 # Remove automatic redirects - handled by custom views
 LOGIN_REDIRECT_URL = '/'
 LOGOUT_REDIRECT_URL = '/login/'
+
+# CSRF trusted origins for deployed environment
+CSRF_TRUSTED_ORIGINS = ['https://*.vercel.app']

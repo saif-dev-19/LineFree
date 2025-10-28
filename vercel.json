@@ -2,13 +2,16 @@
   "builds": [
     {
       "src": "line_free/wsgi.py",
-      "use": "@vercel/python"
+      "use": "@vercel/python",
+      "config": { "maxLambdaSize": "15mb" }
+    },
+    {
+      "src": "staticfiles/**/*",
+      "use": "@vercel/static"
     }
   ],
   "routes": [
-    {
-      "src": "/(.*)",
-      "dest": "line_free/wsgi.py"
-    }
+    { "src": "/static/(.*)", "dest": "/staticfiles/$1" },
+    { "src": "/(.*)", "dest": "line_free/wsgi.py" }
   ]
 }
