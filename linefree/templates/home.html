@@ -1,0 +1,107 @@
+{% extends 'base.html' %}
+{% block content %}
+<div class="max-w-4xl mx-auto">
+    <h2 class="text-2xl font-bold mb-6 text-center">Generate Token</h2>
+    
+    {% if messages %}
+        {% for message in messages %}
+            <div class="alert alert-{{ message.tags }} mb-4" role="alert">
+                {{ message }}
+            </div>
+        {% endfor %}
+    {% endif %}
+
+    <!-- Token Generation Form -->
+    <div class="bg-white p-6 rounded-2xl shadow-md mb-8">
+        <form method="post" class="space-y-4">
+            {% csrf_token %}
+            {{ form.as_p }}
+            <button type="submit" class="bg-blue-600 text-black px-6 py-2 rounded hover:bg-blue-700">
+                Get Token
+            </button>
+        </form>
+    </div>
+
+    <!-- Show Available Organizations and Services -->
+    <div class="mb-8">
+    <h3 class="text-xl font-semibold mb-4 text-center">Available Organizations & Services</h3>
+        <div class="grid md:grid-cols-2 lg:grid-cols-3 gap-4">
+            {{organizations}}
+            {% for org in organizations %}
+            <div class="bg-gray-50 p-4 rounded-lg border shadow">
+                <h4 class="font-semibold text-lg text-blue-600">{{ org }}</h4>
+                <p class="text-sm text-gray-600">{{ org.org_type }}</p>
+
+                {% if org.services.all %}
+                    <div class="mt-2 bg-white p-2 rounded">
+                        <strong class="text-sm">Services:</strong>
+                        {% for service in org.services.all %}
+                            <p class="text-sm mt-1">
+                                <strong>{{ service.name }}</strong><br>
+                                <span class="text-green-600">
+                                    {{ service.start_time|time:"h:i" }} - {{ service.end_time|time:"h:i" }}
+                                </span>
+                            </p>
+                        {% endfor %}
+                    </div>
+                {% else %}
+                    <p class="text-red-500 text-sm mt-2">No service available</p>
+                {% endif %}
+
+            </div>
+            {% empty %}
+            <p class="text-center text-gray-500">No organizations found.</p>
+            {% endfor %}
+        </div>
+    </div>
+
+
+    <!-- Token History -->
+    <div>
+        <h3 class="text-xl font-semibold mb-4">Your Token History</h3>
+        {% if user_tokens %}
+        <div class="overflow-x-auto">
+            <table class="table-auto w-full bg-white rounded-lg shadow-sm">
+                <thead class="bg-gray-100">
+                    <tr>
+                        <th class="p-3 text-left">Token #</th>
+                        <th class="p-3 text-left">Service</th>
+                        <th class="p-3 text-left">Organization</th>
+                        <th class="p-3 text-left">Status</th>
+                        <th class="p-3 text-left">Date</th>
+                        <th class="p-3 text-left">Action</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for t in user_tokens %}
+                    <tr class="border-t">
+                        <td class="p-3 font-bold text-blue-600">{{ t.token_number }}</td>
+                        <td class="p-3">{{ t.service_type.name }}</td>
+                        <td class="p-3">{{ t.organization.name }}</td>
+                        <td class="p-3">
+                            <span class="px-2 py-1 rounded-full text-xs
+                                {% if t.status == 'Pending' %}bg-yellow-100 text-yellow-800
+                                {% elif t.status == 'Serving' %}bg-green-100 text-green-800
+                                {% elif t.status == 'Completed' %}bg-gray-100 text-gray-800
+                                {% endif %}">
+                                {{ t.status }}
+                            </span>
+                        </td>
+                        <td class="p-3 text-sm">{{ t.created_at|date:"d M Y H:i" }}</td>
+                        <td class="p-3">
+                            <a href="{% url 'my_token' t.id %}" class="text-blue-600 hover:text-blue-800 text-sm">View Details</a>
+                        </td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+        {% else %}
+        <div class="bg-gray-50 p-8 rounded-lg text-center">
+            <p class="text-gray-600">You haven't generated any tokens yet.</p>
+            <p class="text-sm text-gray-500">Generate your first token using the form above!</p>
+        </div>
+        {% endif %}
+    </div>
+</div>
+{% endblock %}

@@ -1,0 +1,11 @@
+{% extends 'base.html' %}
+{% block content %}
+<h3 class="text-center">Now Serving</h3>
+{% if now_serving %}
+    <h1 class="text-center display-1">{{ now_serving.token_number }}</h1>
+    <p class="text-center">Service: {{ now_serving.service_type }}</p>
+    <p class="text-center">Organization: {{ now_serving.organization }}</p>
+{% else %}
+    <p class="text-center">No token is being served right now.</p>
+{% endif %}
+{% endblock %}

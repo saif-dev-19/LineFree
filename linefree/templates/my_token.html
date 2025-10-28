@@ -1,0 +1,9 @@
+{% extends 'base.html' %}
+{% block content %}
+<h3>Your Token</h3>
+<p><b>Token Number:</b> {{ token.token_number }}</p>
+<p><b>Service:</b> {{ token.service_type }}</p>
+<p><b>Organization:</b> {{ token.organization }}</p>
+<p><b>Status:</b> {{ token.status }}</p>
+<p><b>People before you:</b> {{ waiting_count }}</p>
+{% endblock %}
