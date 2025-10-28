@@ -11,6 +11,8 @@ https://docs.djangoproject.com/en/5.2/ref/settings/
 """
 
 from pathlib import Path
+import os
+import dj_database_url
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
@@ -23,8 +25,8 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 SECRET_KEY = 'django-insecure-**vwq3e)p)fpw7&jiwupi8dqi)md$)&^n6-n2n)%*m#rgq@ijs'
 
 # SECURITY WARNING: don't run with debug turned on in production!
-# Enable DEBUG for local development. Use env var in production.
-DEBUG = True
+# Use env var to control DEBUG (defaults True locally)
+DEBUG = os.getenv('DEBUG', 'True') == 'True'
 
 ALLOWED_HOSTS = [
     '.vercel.app',
@@ -90,6 +92,11 @@ DATABASES = {
     }
 }
 
+# If DATABASE_URL is provided (e.g., on Vercel), use it
+DATABASE_URL = os.getenv('DATABASE_URL')
+if DATABASE_URL:
+    DATABASES['default'] = dj_database_url.parse(DATABASE_URL, conn_max_age=600, ssl_require=True)
+
 
 # Password validation
 # https://docs.djangoproject.com/en/5.2/ref/settings/#auth-password-validators
@@ -128,7 +135,7 @@ USE_TZ = True
 STATIC_URL = '/static/'
 STATIC_ROOT = BASE_DIR / "staticfiles"
 STATICFILES_DIRS = [BASE_DIR / "static"]
-STATICFILES_STORAGE = "whitenoise.storage.CompressedStaticFilesStorage"
+STATICFILES_STORAGE = "whitenoise.storage.CompressedManifestStaticFilesStorage"
  # Default primary key field type
 # https://docs.djangoproject.com/en/5.2/ref/settings/#default-auto-field
 
@@ -141,3 +148,6 @@ LOGOUT_REDIRECT_URL = '/login/'
 
 # CSRF trusted origins for deployed environment
 CSRF_TRUSTED_ORIGINS = ['https://*.vercel.app']
+
+# Ensure HTTPS headers are respected behind proxies (Vercel)
+SECURE_PROXY_SSL_HEADER = ('HTTP_X_FORWARDED_PROTO', 'https')

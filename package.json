@@ -6,7 +6,8 @@
   },
   "scripts": {
     "build:tailwind": "npx tailwindcss -i ./static/css/tailwind.css -o ./static/css/output.css --minify",
-    "watch:tailwind": "npx tailwindcss -i ./static/css/tailwind.css -o ./static/css/output.css --watch"
+    "watch:tailwind": "npx tailwindcss -i ./static/css/tailwind.css -o ./static/css/output.css --watch",
+    "vercel-build": "python -m pip install -r requirements.txt && python manage.py collectstatic --noinput && python manage.py migrate --noinput"
   },
   "dependencies": {
     "@tailwindcss/postcss": "^4.1.16"
