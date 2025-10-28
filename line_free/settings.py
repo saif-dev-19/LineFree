@@ -25,7 +25,13 @@ SECRET_KEY = 'django-insecure-**vwq3e)p)fpw7&jiwupi8dqi)md$)&^n6-n2n)%*m#rgq@ijs
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = False
 
-ALLOWED_HOSTS = ['.vercel.app', 'localhost']
+ALLOWED_HOSTS = [
+    '.vercel.app',
+    'localhost',
+    '127.0.0.1',
+    'line-free-git-main-saif-dev-19s-projects.vercel.app',
+    'line-free-nnenfbia9-saif-dev-19s-projects.vercel.app',
+]
 
 
 
@@ -59,7 +65,7 @@ ROOT_URLCONF = 'line_free.urls'
 TEMPLATES = [
     {
         'BACKEND': 'django.template.backends.django.DjangoTemplates',
-        'DIRS': [BASE_DIR / 'linefree/templates'],
+        'DIRS': [BASE_DIR / 'linefree'/ 'templates'],
         'APP_DIRS': True,
         'OPTIONS': {
             'context_processors': [
@@ -130,5 +136,5 @@ DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
 
 # Remove automatic redirects - handled by custom views
-# LOGIN_REDIRECT_URL = '/'
-# LOGOUT_REDIRECT_URL = '/login/'
+LOGIN_REDIRECT_URL = '/'
+LOGOUT_REDIRECT_URL = '/login/'
