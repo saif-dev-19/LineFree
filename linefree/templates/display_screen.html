@@ -1,11 +1,45 @@
 {% extends 'base.html' %}
 {% block content %}
-<h3 class="text-center">Now Serving</h3>
-{% if now_serving %}
-    <h1 class="text-center display-1">{{ now_serving.token_number }}</h1>
-    <p class="text-center">Service: {{ now_serving.service_type }}</p>
-    <p class="text-center">Organization: {{ now_serving.organization }}</p>
-{% else %}
-    <p class="text-center">No token is being served right now.</p>
-{% endif %}
+<div class="min-h-screen flex items-center justify-center bg-gradient-to-br from-blue-50 to-indigo-100 py-12 px-4">
+    <div class="max-w-4xl w-full text-center">
+        <div class="bg-white rounded-2xl shadow-2xl border border-gray-200 overflow-hidden">
+            <!-- Header -->
+            <div class="bg-gradient-to-r from-blue-600 to-indigo-700 px-8 py-6">
+                <h1 class="text-4xl font-bold text-black uppercase tracking-wider">Now Serving</h1>
+            </div>
+
+            <!-- Token Display -->
+            <div class="p-12">
+                {% if now_serving %}
+                    <div class="mb-8">
+                        <p class="text-gray-500 text-sm font-medium mb-4 uppercase tracking-wider">Token Number</p>
+                        <h2 class="text-8xl font-bold text-blue-600 mb-8">#{{ now_serving.token_number }}</h2>
+                    </div>
+
+                    <div class="grid md:grid-cols-2 gap-6 mt-8">
+                        <div class="bg-gray-50 p-6 rounded-xl border border-gray-200">
+                            <p class="text-sm font-medium text-gray-500 mb-2 uppercase">Service</p>
+                            <p class="text-2xl font-bold text-gray-900">{{ now_serving.service_type.name }}</p>
+                        </div>
+                        
+                        <div class="bg-gray-50 p-6 rounded-xl border border-gray-200">
+                            <p class="text-sm font-medium text-gray-500 mb-2 uppercase">Organization</p>
+                            <p class="text-2xl font-bold text-gray-900">{{ now_serving.organization.name }}</p>
+                        </div>
+                    </div>
+                {% else %}
+                    <div class="py-16">
+                        <div class="mb-6">
+                            <svg class="mx-auto h-20 w-20 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"></path>
+                            </svg>
+                        </div>
+                        <h2 class="text-3xl font-bold text-gray-700 mb-2">No Token Being Served</h2>
+                        <p class="text-gray-500 text-lg">Please wait for the next token to be called.</p>
+                    </div>
+                {% endif %}
+            </div>
+        </div>
+    </div>
+</div>
 {% endblock %}

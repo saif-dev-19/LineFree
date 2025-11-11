@@ -6,8 +6,9 @@ from django.contrib.auth import login, logout
 from django.contrib.auth.views import LoginView
 from django.utils import timezone
 from django.contrib import messages
-from django.views.decorators.http import require_POST
+from django.views.decorators.http import require_POST, require_http_methods
 from django.urls import reverse_lazy
+from django.http import JsonResponse
 
 
 
@@ -157,3 +158,18 @@ def manage_services(request):
             return redirect('manage_services')
 
     return render(request, 'manage_services.html', {'form': form, 'services': services})
+
+
+@login_required
+@require_http_methods(["GET"])
+def load_services(request):
+    """AJAX endpoint to load services for a given organization"""
+    organization_id = request.GET.get('organization_id')
+    if organization_id:
+        try:
+            services = Service.objects.filter(organization_id=organization_id).order_by('name')
+            services_data = [{'id': service.id, 'name': service.name} for service in services]
+            return JsonResponse({'services': services_data})
+        except (ValueError, Organization.DoesNotExist):
+            return JsonResponse({'services': []}, status=400)
+    return JsonResponse({'services': []}, status=400)

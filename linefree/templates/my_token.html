@@ -1,9 +1,73 @@
 {% extends 'base.html' %}
 {% block content %}
-<h3>Your Token</h3>
-<p><b>Token Number:</b> {{ token.token_number }}</p>
-<p><b>Service:</b> {{ token.service_type }}</p>
-<p><b>Organization:</b> {{ token.organization }}</p>
-<p><b>Status:</b> {{ token.status }}</p>
-<p><b>People before you:</b> {{ waiting_count }}</p>
+<div class="max-w-2xl mx-auto">
+    <div class="text-center mb-8">
+        <h1 class="text-3xl font-bold text-gray-900 mb-2">Your Token Details</h1>
+        <p class="text-gray-600">Track your token status and waiting position</p>
+    </div>
+
+    <div class="bg-white rounded-xl shadow-lg border border-gray-200 overflow-hidden">
+        <!-- Token Number Highlight -->
+        <div class="bg-gradient-to-r from-blue-600 to-blue-700 px-8 py-12 text-center">
+            <p class="text-white text-sm font-medium mb-2 uppercase tracking-wider">Token Number</p>
+            <h2 class="text-6xl font-bold text-white">#{{ token.token_number }}</h2>
+        </div>
+
+        <!-- Token Details -->
+        <div class="p-8 space-y-6">
+            <div class="grid md:grid-cols-2 gap-6">
+                <div class="bg-gray-50 p-4 rounded-lg border border-gray-200">
+                    <p class="text-sm font-medium text-gray-500 mb-1">Service</p>
+                    <p class="text-lg font-semibold text-gray-900">{{ token.service_type.name }}</p>
+                </div>
+                
+                <div class="bg-gray-50 p-4 rounded-lg border border-gray-200">
+                    <p class="text-sm font-medium text-gray-500 mb-1">Organization</p>
+                    <p class="text-lg font-semibold text-gray-900">{{ token.organization.name }}</p>
+                </div>
+            </div>
+
+            <div class="grid md:grid-cols-2 gap-6">
+                <div class="bg-gray-50 p-4 rounded-lg border border-gray-200">
+                    <p class="text-sm font-medium text-gray-500 mb-1">Status</p>
+                    <span class="inline-flex px-3 py-1 text-sm font-semibold rounded-full
+                        {% if token.status == 'Pending' %}bg-yellow-100 text-yellow-800
+                        {% elif token.status == 'Serving' %}bg-green-100 text-green-800
+                        {% elif token.status == 'Completed' %}bg-gray-100 text-gray-800
+                        {% endif %}">
+                        {{ token.status }}
+                    </span>
+                </div>
+                
+                <div class="bg-gray-50 p-4 rounded-lg border border-gray-200">
+                    <p class="text-sm font-medium text-gray-500 mb-1">Created At</p>
+                    <p class="text-lg font-semibold text-gray-900">{{ token.created_at|date:"d M Y, h:i A" }}</p>
+                </div>
+            </div>
+
+            <!-- Waiting Count -->
+            <div class="bg-blue-50 p-6 rounded-lg border border-blue-200">
+                <div class="flex items-center justify-between">
+                    <div>
+                        <p class="text-sm font-medium text-blue-600 mb-1">People Before You</p>
+                        <p class="text-3xl font-bold text-blue-900">{{ waiting_count }}</p>
+                    </div>
+                    <div class="text-blue-600">
+                        <svg class="w-12 h-12" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"></path>
+                        </svg>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Actions -->
+        <div class="px-8 pb-8">
+            <a href="{% url 'home' %}" 
+               class="block w-full text-center bg-blue-600 hover:bg-blue-700 text-white font-medium py-3 px-6 rounded-lg transition-colors">
+                Back to Home
+            </a>
+        </div>
+    </div>
+</div>
 {% endblock %}

@@ -18,4 +18,7 @@ urlpatterns = [
     path('logout/', views.logout_page, name='logout'),
     path('register/', views.register, name='register'),
     path("delete-token/<int:token_id>/", views.delete_token, name="delete_token"),
+    
+    # AJAX endpoints
+    path('ajax/load-services/', views.load_services, name='ajax_load_services'),
 ]
